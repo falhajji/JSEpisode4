@@ -7,7 +7,14 @@
  ****************************************************************/
 function getBookById(bookId, books) {
   // Your code goes here
+  let bookInstance = books.find(book => {
+    if (book.id === bookId) {
+      return book;
+    }
+  });
+  return bookInstance;
 }
+//HUSSEIN'S SOLUTION: return books.find(book => book.id === bookID);
 
 /**************************************************************
  * getAuthorByName(authorName, authors):
@@ -18,7 +25,14 @@ function getBookById(bookId, books) {
  ****************************************************************/
 function getAuthorByName(authorName, authors) {
   // Your code goes here
+  let authorInstance = authors.find(author => {
+    if (authorName.toUpperCase() === author.name.toUpperCase()) {
+      return author;
+    }
+  });
+  return authorInstance;
 }
+//HUSSEIN'S SOLUTION: return authors.find(author => author.name.toLowerCase === authorName.toLowerCase)
 
 /**************************************************************
  * bookCountsByAuthor(authors):
@@ -28,7 +42,14 @@ function getAuthorByName(authorName, authors) {
  ****************************************************************/
 function bookCountsByAuthor(authors) {
   // Your code goes here
+  bookCount = authors.map(author => ({
+    author: author.name,
+    bookCount: author.books.length
+  }));
+  return bookCount;
 }
+
+//HUSSEIN'S SOLUTION: same as ours!
 
 /**************************************************************
  * booksByColor(books):
@@ -39,9 +60,14 @@ function bookCountsByAuthor(authors) {
  ****************************************************************/
 function booksByColor(books) {
   const colors = {};
-
   // Your code goes here
-
+  books.forEach(book => {
+    if (colors[book.color]) {
+      colors[book.color].push(book.title);
+    } else {
+      colors[book.color] = [book.title]; // this line of code creates a new color if it doesn't exist in our array of booksByColor
+    }
+  });
   return colors;
 }
 
@@ -54,8 +80,22 @@ function booksByColor(books) {
  *    ["The Hitchhikers Guide", "The Meaning of Liff"]
  ****************************************************************/
 function titlesByAuthorName(authorName, authors, books) {
-  // Your code goes here
+  // let bookarray = [];
+  // let author = getAuthorByName(authorName, authors);
+  // if (author) {
+  //   let authorbooks = author.books;
+  //   bookarray = authorbooks.map(id => getBookById(id, books).title);
+  //   // bookarray = bookid.map(book => book.title);
+  // }
+  // return bookarray;
+  //return book.title
+  let author = getAuthorByName(authorName, authors);
+  if (!author) return []; //this addresses if the author name given is gibberish
+  //Step2: get books by their IDs:
+  return author.books.map(BookID => getBookById(BookID, books).title);
 }
+// HUSSEIN'S SOLUTION
+//Step 1: get the author
 
 /**************************************************************
  * mostProlificAuthor(authors):
@@ -65,8 +105,17 @@ function titlesByAuthorName(authorName, authors, books) {
  * Note: assume there will never be a tie
  ****************************************************************/
 function mostProlificAuthor(authors) {
-  // Your code goes here
+  let prolificAuthor = authors[0];
+  authors.forEach(author => {
+    if (author.books.length > prolificAuthor.books.length) {
+      prolificAuthor = author;
+    }
+  });
+  return prolificAuthor.name;
 }
+
+// let authorarray = titlesByAuthorName(authorName, authors, books);
+// let auth = authors.forEach(authors.books.length);
 
 /**************************************************************
  * relatedBooks(bookId, authors, books):
